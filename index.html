@@ -1,0 +1,467 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toll Rate Management</title>
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./font-awesome/css/all.min.css">
+    <script src="js/popper.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/jquery-3.6.0.min.js"></script>
+    <script src="./font-awesome/js/all.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400&display=swap" rel="stylesheet">
+
+    <!-- datatable -->
+    <link rel="stylesheet" type="text/css" href="./css/datatables.min.css" />
+    <script type="text/javascript" src="js/datatables.min.js"></script>
+
+    <!-- chart.js -->
+    <script src="./js/chart.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="./script.js"></script>
+    <script src="./headerScript.js"></script>
+</head>
+
+<body>
+    <header>
+        <div id="menu" class="d-flex flex-column shadow">
+            <div id="desktopMenu">
+                <div class="d-flex px-1 py-3 align-items-center" id="menu-header">
+                    <div class="menu-btn" id="desktopMenuBtn">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center text-center title-container">
+                        <!-- <a href="./index.html" class="ps-md-0 ps-2">
+                            <i class="fa-solid fa-car-side p-2 fa-xl text-primary" style="color:var(--bs-teal)"></i>
+                        </a> -->
+                        <a href="./index.html" class="logo-outside hide-when-collapsed">
+                            <!-- <p class="m-0 text-primary title hide-when-collapsed show">Toll Rate Management</p> -->
+                            <img src="./images/logo.png" alt="Quantum" id="logo">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- Add .accordion-flush to remove the default background-color -->
+            <div class="accordion accordion-flush hide-when-collapsed show flex-column" id="menu-tree">
+
+            </div>
+            <div id="account" class="p-3 hide-when-collapsed show">
+                <div class="dropdown">
+                    <button class="m-0 d-block dropdown-toggle d-flex align-items-center" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <div>
+                            <span>Hi,</span>
+                            <span>June</span>
+                        </div>
+                    </button>
+                    <ul class="dropdown-menu" id="logout-place">
+                        <li><a class="dropdown-item text-center" onclick="Logout()" href="#">Change PW</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="dropstart">
+                            <a class="dropdown-item text-center dropdown-toggle has-dropdown-parent" href="#"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Language
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item text-center" href="#">EN</a>
+                                    <hr class="dropdown-divider">
+                                    <a class="dropdown-item text-center" href="#">泰文</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-center" onclick="Logout()" href="#">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="position-fixed py-2 px-1 collapsed" id="mobileMenu">
+            <div class="menu-btn">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        <div id="title">
+            <div class="d-flex position-fixed w-100">
+                <div class="menu-holder"></div>
+                <div class="flex-grow-1">
+                    <h5 class="p-md-4 p-2 m-0 text-white">Toll Plaza</h5>
+                </div>
+            </div>
+        </div>
+    </header>
+    <script>
+        let menuDatas = {
+            "MenuRoots":
+                [{
+                    "Name": "Web.Menu.Index.Folder.WebsitePermissionManagement",
+                    "DisplayName": "Website Permission Management", "Url": "#", "Type": "M",
+                    "Ul": [
+                        {
+                            "Name": "Web.Menu.Index.Function.MenuManagement",
+                            "DisplayName": "Menu Management01",
+                            "Url": "#",
+                            "Type": "M",
+                            "Ul": [
+                                {
+                                    "Name": "Web.Menu.Index.Function.MenuManagement",
+                                    "DisplayName": "Menu Management",
+                                    "Url": "/Acl/Menu/Index",
+                                    "Type": "A",
+                                    "Ul": null
+                                },
+                                {
+                                    "Name": "Web.Menu.Index.Function.UserManagement",
+                                    "DisplayName": "User Management",
+                                    "Url": "/Acl/Users/Index",
+                                    "Type": "A",
+                                    "Ul": null
+                                },
+                                {
+                                    "Name": "Web.Menu.Index.Function.RoleManagement",
+                                    "DisplayName": "Role Management",
+                                    "Url": "/Acl/Roles/Index",
+                                    "Type": "A",
+                                    "Ul": null
+                                },
+                                {
+                                    "Name": "Web.Menu.Index.Function.RolePermissionManagement",
+                                    "DisplayName": "Role Permission Management",
+                                    "Url": "/Acl/RolesPermission/Index",
+                                    "Type": "M",
+                                    "Ul": [{
+                                        "Name": "Web.Menu.Index.Function.MenuManagement",
+                                        "DisplayName": "Menu Management01",
+                                        "Url": "#",
+                                        "Type": "M",
+                                        "Ul": [
+                                            {
+                                                "Name": "Web.Menu.Index.Function.MenuManagement",
+                                                "DisplayName": "Menu Management",
+                                                "Url": "/Acl/Menu/Index",
+                                                "Type": "A",
+                                                "Ul": null
+                                            },
+                                            {
+                                                "Name": "Web.Menu.Index.Function.UserManagement",
+                                                "DisplayName": "User Management",
+                                                "Url": "/Acl/Users/Index",
+                                                "Type": "A",
+                                                "Ul": null
+                                            },
+                                            {
+                                                "Name": "Web.Menu.Index.Function.RoleManagement",
+                                                "DisplayName": "Role Management",
+                                                "Url": "/Acl/Roles/Index",
+                                                "Type": "A",
+                                                "Ul": null
+                                            },
+                                            {
+                                                "Name": "Web.Menu.Index.Function.RolePermissionManagement",
+                                                "DisplayName": "Role Permission Management",
+                                                "Url": "/Acl/RolesPermission/Index",
+                                                "Type": "A",
+                                                "Ul": null
+                                            }]
+                                    }]
+                                }]
+                        },
+                        {
+                            "Name": "Web.Menu.Index.Function.UserManagement",
+                            "DisplayName": "User Management",
+                            "Url": "/Acl/Users/Index",
+                            "Type": "A",
+                            "Ul": null
+                        },
+                        {
+                            "Name": "Web.Menu.Index.Function.RoleManagement",
+                            "DisplayName": "Role Management",
+                            "Url": "/Acl/Roles/Index",
+                            "Type": "A",
+                            "Ul": null
+                        },
+                        {
+                            "Name": "Web.Menu.Index.Function.RolePermissionManagement",
+                            "DisplayName": "Role Permission Management",
+                            "Url": "/Acl/RolesPermission/Index",
+                            "Type": "A",
+                            "Ul": null
+                        }]
+                }, { "Name": "Web.Menu.Index.Function.RFIDGoodsReceivedNoteManagement", "DisplayName": "RFIDGoodsReceivedNoteManagement", "Url": "/RFID/RFIDGoodsReceivedNote/Index", "Type": "A", "Ul": null }]
+        };
+        getMenutree();
+        afterGetHeader();
+
+        function getMenutree() {
+            $(menuDatas["MenuRoots"]).each((i, v) => {
+                let noArrowClass = v["Type"] == "A" ?
+                    "no-arrow" : "";
+                let parent = `
+                <div class="accordion-item ${noArrowClass}">
+                    <h2 class="accordion-header" id="headingOne">
+                        <a href="${v["Url"]}">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseNowArrow0_${i}" aria-expanded="false"
+                                aria-controls="collapseNowArrow0_${i}">
+                                ${v["DisplayName"]}
+                            </button>
+                        </a>
+                    </h2>`;
+
+                if (v["Ul"] != null) {
+                    let child = getChild(v["Ul"], i, 0);
+                    parent += child;
+                }
+                parent += "</div>";
+
+                $("#menu-tree").append(parent);
+            });
+
+            function getChild(datas, index, floor) {
+                let child =
+                    `<div id="collapseNowArrow${floor}_${index}" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                            data-bs-parent="collapseNowArrow${floor}_${index}">
+                    <ul>
+                    `;
+                floor++;
+                let listyle = "padding:10px 20px 10px " + (floor + 1) * 20 + "px;";
+                $(datas).each((i, v) => {
+                    if (v["Ul"] == null) {
+                        child += ` <li style="${listyle}"><a href="${v["Url"]}">
+                            ${v["DisplayName"]}
+                        </a></li>`;
+                    }
+                    else {
+                        child += `
+                        <li>
+                        <button class="accordion-button collapsed" style="${listyle}" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseNowArrow${floor}_${i}" aria-expanded="false" aria-controls="collapseNowArrow${floor}_${i}">
+                            ${v["DisplayName"]}
+                        </button>
+                        `;
+                        child += getChild(v["Ul"], i, floor);
+                    }
+                });
+                child += "</li></ul></div>";
+                return child;
+            }
+        }
+        $(".has-dropdown-parent").click((e) => {
+            e.stopPropagation();
+        })
+    </script>
+    <div class="d-flex position-relative">
+        <div class="menu-holder"></div>
+        <section class="position-relative" id="system-main">
+            <div class="p-2 px-xl-5 position-relative d-flex flex-column align-items-center w-100">
+                <div class="card card-body text-gray-800 px-lg-5 w-100 mb-4">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="row align-items-center">
+                                <div class="col-md-12 mb-2">Road Number</div>
+                                <div class="col-md-12">
+                                    <input type="hidden" id="QUERY_SYS_TYPE" name="QUERY_SYS_TYPE">
+                                    <input type="text" id="QUERY_USER_ID" name="QUERY_USER_ID" class="form-control"
+                                        placeholder="" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="row align-items-center">
+                                <div class="col-md-12 mb-2">Direction</div>
+                                <div class="col-md-12">
+                                    <select id="QUERY_TYPE" name="QUERY_TYPE" class="form-select">
+                                        <option value="0">ALL</option>
+                                        <option value="2">North</option>
+                                        <option value="6">South</option>
+                                        <option value="7">East</option>
+                                        <option value="8">West</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 pt-2" style="text-align: right">
+                            <a href="javascript:void(0);" class="btn btn-primary mx-1" onclick="query();">Inquire</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card shadow-sm px-lg-5 w-100 mb-4 card-body position-relative">
+                    <div class="d-flex justify-content-between mb-3">
+                        <h5 class="card-title text-secondary">Inquire Result</h5>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                            onclick='$("#exampleModalLabel").text("Create")'>+
+                            Create</button>
+                    </div>
+                    <div class=" overflow-auto">
+                        <table id="dollarTable" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 4rem;"></th>
+                                    <th>Road Number</th>
+                                    <th>Direction</th>
+                                    <th>Sequence No.</th>
+                                    <th>Gateway No.</th>
+                                    <th>Gateway Name</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <button class="btn btn-outline-primary" data-bs-toggle="modal"
+                                            data-bs-target="#exampleModal">Modify</button>
+                                    </td>
+                                    <td>...</td>
+                                    <td>...</td>
+                                    <td>...</td>
+                                    <td>...</td>
+                                    <td>...</td>
+                                    <td>...</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <button class="btn btn-outline-primary" data-bs-toggle="modal"
+                                            data-bs-target="#exampleModal">Modify</button>
+                                    </td>
+                                    <td>...</td>
+                                    <td>...</td>
+                                    <td>...</td>
+                                    <td>...</td>
+                                    <td>...</td>
+                                    <td>...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modify</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-4">
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-6 mb-3">
+                            <div class="row align-items-center">
+                                <div class="col-md-12 mb-2">Road Number</div>
+                                <div class="col-md-12">
+                                    <input type="hidden" id="QUERY_SYS_TYPE" name="QUERY_SYS_TYPE">
+                                    <input type="text" id="QUERY_USER_ID" name="QUERY_USER_ID" class="form-control"
+                                        placeholder="" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 mb-3">
+                            <div class="row align-items-center">
+                                <div class="col-md-12 mb-2">Direction</div>
+                                <div class="col-md-12">
+                                    <select id="QUERY_TYPE" name="QUERY_TYPE" class="form-select">
+                                        <option value="0">ALL</option>
+                                        <option value="2">North</option>
+                                        <option value="6">South</option>
+                                        <option value="7">East</option>
+                                        <option value="8">West</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 mb-3">
+                            <div class="row align-items-center">
+                                <div class="col-md-12 mb-2">Sequence No.</div>
+                                <div class="col-md-12">
+                                    <input type="hidden" id="QUERY_SYS_TYPE" name="QUERY_SYS_TYPE">
+                                    <input type="text" id="QUERY_USER_ID" name="QUERY_USER_ID" class="form-control"
+                                        placeholder="" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 mb-3">
+                            <div class="row align-items-center">
+                                <div class="col-md-12 mb-2">Gateway No.</div>
+                                <div class="col-md-12">
+                                    <input type="hidden" id="QUERY_SYS_TYPE" name="QUERY_SYS_TYPE">
+                                    <input type="text" id="QUERY_USER_ID" name="QUERY_USER_ID" class="form-control"
+                                        placeholder="" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 mb-3">
+                            <div class="row align-items-center">
+                                <div class="col-md-12 mb-2">Gateway Name</div>
+                                <div class="col-md-12">
+                                    <input type="hidden" id="QUERY_SYS_TYPE" name="QUERY_SYS_TYPE">
+                                    <input type="text" id="QUERY_USER_ID" name="QUERY_USER_ID" class="form-control"
+                                        placeholder="" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 mb-3">
+                            <div class="row align-items-center">
+                                <div class="col-md-12 mb-2">Status</div>
+                                <div class="col-md-12">
+                                    <select id="QUERY_TYPE" name="QUERY_TYPE" class="form-select">
+                                        <option value="0">Active</option>
+                                        <option value="0">Disable</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    // DataTable
+    var table = $('#dollarTable').DataTable({
+        initComplete: function () {
+            // Apply the search
+            this.api().columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change clear', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        }
+        , searching: false
+    });
+
+    document.getElementById('exampleModal').addEventListener('hidden.bs.modal', function (event) {
+        // do something...
+        $("#exampleModalLabel").text("Modify");
+    })
+</script>
+
+</html>
