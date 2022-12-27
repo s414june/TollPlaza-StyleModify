@@ -861,11 +861,10 @@ th {
 
 #menu
   > .accordion
-  > .accordion-item
+  > .accordion-item.active
   > .accordion-header
-  .active
   .accordion-button {
-  background-color: rgba(122, 158, 216, 0.2);
+  background-color: rgba(135, 171, 230, 0.2);
 }
 
 #menu
@@ -896,6 +895,18 @@ border-right: 2px solid #fff;
 border-bottom: 2px solid #fff;
 transform: rotate(-135deg); */
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+  background-size: 100%;
+}
+
+.accordion-button::after {
+  background-size: 80%;
+}
+
+#menu-tree .accordion-collapse ul li.active {
+  background: linear-gradient(to bottom, rgb(255, 244, 243), rgb(163, 191, 238));
+  text-shadow: #fff 2px 2px 5px;
+  /* color: rgb(87, 67, 177); */
+  color: #22282e;
 }
 
 #menu-tree ul li {
@@ -910,10 +921,10 @@ transform: rotate(-135deg); */
     top: initial !important;
     height: fit-content;
   }
-  #account > div{
+  #account > div {
     margin-bottom: 10px;
   }
-  #account button{
+  #account button {
     margin: 0 auto !important;
     border: 1px solid #fff;
     padding: 10px 0;

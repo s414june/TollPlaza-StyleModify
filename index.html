@@ -52,7 +52,32 @@
             </div>
             <!-- Add .accordion-flush to remove the default background-color -->
             <div class="accordion accordion-flush hide-when-collapsed show flex-column" id="menu-tree">
-
+                <div class="accordion-item active">
+                    <h2 class="accordion-header" id="headingOne">
+                        <a href="#">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseNowArrowDemo" aria-expanded="true"
+                                aria-controls="collapseNowArrowDemo">
+                                Website Permission Management
+                            </button>
+                        </a>
+                    </h2>
+                    <div id="collapseNowArrowDemo" class="accordion-collapse  collapse" aria-labelledby="headingOne"
+                        data-bs-parent="#menu-tree" style="">
+                        <ul>
+                            <li style="padding:10px 20px 10px 40px;" class="active"><a href="/Acl/Users/Index">
+                                    User Management
+                                </a></li>
+                            <li style="padding:10px 20px 10px 40px;"><a href="/Acl/Roles/Index">
+                                    Role Management
+                                </a></li>
+                            <li style="padding:10px 20px 10px 40px;"><a href="/Acl/RolesPermission/Index">
+                                    Role Permission Management
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
             <div id="account" class="p-3 hide-when-collapsed show">
                 <div class="dropdown">
@@ -185,8 +210,36 @@
                             "Name": "Web.Menu.Index.Function.UserManagement",
                             "DisplayName": "User Management",
                             "Url": "/Acl/Users/Index",
-                            "Type": "A",
-                            "Ul": null
+                            "Type": "M",
+                            "Ul": [
+                                {
+                                    "Name": "Web.Menu.Index.Function.MenuManagement",
+                                    "DisplayName": "Menu Management",
+                                    "Url": "/Acl/Menu/Index",
+                                    "Type": "A",
+                                    "Ul": null
+                                },
+                                {
+                                    "Name": "Web.Menu.Index.Function.UserManagement",
+                                    "DisplayName": "User Management",
+                                    "Url": "/Acl/Users/Index",
+                                    "Type": "A",
+                                    "Ul": null
+                                },
+                                {
+                                    "Name": "Web.Menu.Index.Function.RoleManagement",
+                                    "DisplayName": "Role Management",
+                                    "Url": "/Acl/Roles/Index",
+                                    "Type": "A",
+                                    "Ul": null
+                                },
+                                {
+                                    "Name": "Web.Menu.Index.Function.RolePermissionManagement",
+                                    "DisplayName": "Role Permission Management",
+                                    "Url": "/Acl/RolesPermission/Index",
+                                    "Type": "A",
+                                    "Ul": null
+                                }]
                         },
                         {
                             "Name": "Web.Menu.Index.Function.RoleManagement",
@@ -213,7 +266,7 @@
                     "no-arrow" : "";
                 let parent = `
                 <div class="accordion-item ${noArrowClass}">
-                    <h2 class="accordion-header" id="headingOne">
+                    <h2 class="accordion-header" id="accordionHeading0_${i}">
                         <a href="${v["Url"]}">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#collapseNowArrow0_${i}" aria-expanded="false"
@@ -224,7 +277,7 @@
                     </h2>`;
 
                 if (v["Ul"] != null) {
-                    let child = getChild(v["Ul"], i, 0);
+                    let child = getChild(v["Ul"], i, 0, "#menu-tree");
                     parent += child;
                 }
                 parent += "</div>";
@@ -232,10 +285,12 @@
                 $("#menu-tree").append(parent);
             });
 
-            function getChild(datas, index, floor) {
+            function getChild(datas, index, floor, parentselector) {
+                let collapseNowArrowId = "collapseNowArrow" + floor + "_" + index;
                 let child =
-                    `<div id="collapseNowArrow${floor}_${index}" class="accordion-collapse collapse" aria-labelledby="headingOne"
-                            data-bs-parent="collapseNowArrow${floor}_${index}">
+                    `<div id="${collapseNowArrowId}" class="accordion-collapse collapse"
+                     aria-labelledby="accordionHeading${floor}_${index}"
+                            data-bs-parent="${parentselector}">
                     <ul>
                     `;
                 floor++;
@@ -254,7 +309,7 @@
                             ${v["DisplayName"]}
                         </button>
                         `;
-                        child += getChild(v["Ul"], i, floor);
+                        child += getChild(v["Ul"], i, floor, "#" + collapseNowArrowId);
                     }
                 });
                 child += "</li></ul></div>";
